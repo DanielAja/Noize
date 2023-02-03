@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Noize</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+  <link rel="manifest" href="/favicon/site.webmanifest">
+</head>
+
+<body style="background-color: white;">
+  <div class="nav-container">
+    <nav class="titlebar prevent-select">
+      <p class="title center">Noize</p>
+    </nav>
+  </div>
+  <form id="signin-form" class="parent-container center">
+    <label class="login-text" for="email">Username:</label><br>
+    <input class="text-input-box" id="email" name="username"><br>
+    <label class="login-text" for="password">Password:</label><br>
+    <input class="text-input-box" type="password" id="password" name="password"><br><br>
+    <input class="submit-button" type="submit" value="Login">
+  </form>
+  <p class="center">Don't have an account? <button class="submit-button signup-button"
+      onclick="location.href='signup'">Sign Up</button></p><br><br><br>
+  <p class="center">Here for a good time, not a long time?<br><br>
+    <button class="submit-button" onclick="location.href='demo'">View the #demo</button>
+  </p>
+</body>
+<link rel="stylesheet" href="/css/styles.css">
+<script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-firestore.js">
+  const firebase = require("firebase");
+  // Required for side-effects
+  require("firebase/firestore");
+</script>
+<script src="https://www.gstatic.com/firebasejs/7.22.1/firebase-storage.js"></script>
+
+<script type="module" src="javascript/javascript.js"></script>
+<script type="module" src="javascript/config.js"></script>
+
+</html>

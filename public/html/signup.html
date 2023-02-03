@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+</head>
+<body style="background-color: white;">
+<div class="nav-container">
+    <nav class="titlebar prevent-select">
+      <p class="title center">Noize</p>
+    </nav>
+  </div>
+  <form id="signup-form" class="parent-container center">
+    <label for="email" class="login-text">Email:</label><br>
+    <input id="email" name="email" class="text-input-box"><br>
+    <label for="username" class="login-text">Username:</label><br>
+    <input type="username" id="username" name="username" class="text-input-box"><br>
+    <label for="password" class="login-text">Password:</label><br>
+    <input type="password" id="password" name="password" class="text-input-box"><br>
+    <label for="confirmPassword" class="login-text">Confirm Password:</label><br>
+    <input type="password" id="confirmPassword" name="confirmPassword" class="text-input-box"><br><br>
+    <input type="submit" value="Sign Up" class="submit-button">
+  </form>
+  <p class="center">Already have an account? <button class="submit-button signup-button" onclick="location.href='/'">Sign In</button></p>
+</body>
+
+<link rel="stylesheet" href="/css/styles.css">
+<script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-firestore.js">
+    const firebase = require("firebase");
+    // Required for side-effects
+    require("firebase/firestore");
+</script>
+<script src="https://www.gstatic.com/firebasejs/7.22.1/firebase-storage.js"></script>
+
+<script type="module" src="javascript/javascript.js"></script>
+<script type="module" src="javascript/config.js"></script>
+
+</html>

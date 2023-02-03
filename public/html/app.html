@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noize</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/favicon/site.webmanifest">
+</head>
+
+<body>
+    <div class="nav-container prevent-select">
+        <nav class="titlebar">
+            <p class="toggle-nav" id="current-page-title">@all<span id="current-page-title"></span></p>
+            <p class="title prevent-select" id="title">Noize</p>
+        </nav>
+        <nav class="navbar prevent-select" id="navbar">
+            <p>
+                <a class="nav-item active" id="now-nav-item">Now</a><br />
+                <a class="nav-item" id="loud-nav-item">Loud</a><br />
+                <a class="nav-item" id="amped-nav-item">Amped</a><br />
+                <a class="nav-item" id="username-nav-item">@username</a><br />
+            </p>
+            <p class="nav-item" id="logout-button">Logout</p>
+        </nav>
+    </div>
+
+    <div class="parent-container">
+        <button id="start-button">Make Some Noize!</button>
+    </div>
+
+    <form id="wave" class="wave" action="/convert" method="post" enctype="multipart/form-data">
+        <textarea class="text" type="text" id="message" name="message" autocomplete="off" cols="80" rows="10"></textarea><br>
+        <input type="file" id="file" name="file" accept=".mp3, .wav, audio/*" style="display: none;">
+        <audio id="audio" class="audio" controls></audio>
+        <p id="countdown-text">30:300</p>
+        <input type="submit" value="Share" id="share-button">
+    </form>
+
+    <button id="play-button" class="prevent-select hide">Play</button>
+    <audio controls controlsList="nodownload" id="play-button-audio" class="prevent-select"></audio>
+
+    <table id="feed" style="display: none">
+        <thead>
+            <tr>
+                <th>Wave</th>
+                <th>User</th>
+                <th>Time</th>
+                <th>Audio</th>
+                <th>Score</th>
+                <th></th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody id="tbody">
+        </tbody>
+    </table>
+
+    <div id="card-feed" class="card-feed"></div>
+</body>
+
+<link rel="stylesheet" href="/css/styles.css">
+
+<script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-firestore.js">
+    const firebase = require("firebase");
+    // Required for side-effects
+    require("firebase/firestore");
+</script>
+<script src="https://www.gstatic.com/firebasejs/7.22.1/firebase-storage.js"></script>
+
+<script type="module" src="javascript/javascript.js"></script>
+<script type="module" src="javascript/config.js"></script>
+
+</html>
