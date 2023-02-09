@@ -1,6 +1,8 @@
-html, body {
+html,
+body {
     overflow-x: hidden;
-  }
+}
+
 body {
     background-color: #e4e0e0;
     font-family: 'Open Sans', sans-serif;
@@ -116,12 +118,13 @@ body {
     background-color: white;
     box-shadow: 0px 0px 10px #ccc;
     max-width: 750px;
-    min-width: 350px;
+    min-width: 300px;
     display: block;
     margin-right: auto;
     margin-left: auto;
     margin-bottom: 10px;
     position: relative;
+    padding: auto;
 }
 
 #wave.show {
@@ -155,9 +158,7 @@ body {
 }
 
 #play-button.hide {
-    /* transform: translateY(200%); */
     bottom: -100px;
-    /* visibility: hidden; */
 }
 
 #play-button-audio {
@@ -182,17 +183,19 @@ body {
 .card {
     width: 95%;
     max-width: 750px;
-    min-width: 350px;
+    min-width: 300px;
     background-color: white;
     margin-top: 5px;
     font-family: 'Open Sans', sans-serif;
-    padding: 5px;
+    padding: 7px;
     margin-bottom: 3px;
     transition: all 0.5s ease;
     box-shadow: 0px 0px 10px #ccc;
     display: flex;
     flex-direction: row;
     height: 100%;
+    margin-right: auto;
+    margin-left: auto;
 }
 
 .card:hover {
@@ -436,7 +439,8 @@ body {
     margin-left: auto;
     margin-top: 10px;
 }
-#message{
+
+#message {
     height: 275px;
 }
 
@@ -545,27 +549,30 @@ body {
 }
 
 .prevent-select {
-    -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari, Chrome, Opera, Samsung */
-    -khtml-user-select: none; /* Konqueror HTML */
-    -moz-user-select: none; /* Firefox */
-    -ms-user-select: none; /* Edge, IE */
-    user-select: none; /* Modern browsers */
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Safari, Chrome, Opera, Samsung */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Firefox */
+    -ms-user-select: none;
+    /* Edge, IE */
+    user-select: none;
+    /* Modern browsers */
     cursor: pointer;
 }
 
 #countdown-text {
-    /* width: 100%; */
-    max-width: 750px;
     font-size: 1rem;
     font-weight: 300;
     margin: 0;
     margin-top: -30px;
-    /* padding-top: 50px; */
     margin-left: -25px;
     font-family: 'Open Sans', sans-serif;
     color: gray;
-    text-align: right;
     position: absolute;
     right: 20px;
+    margin-right: auto;
 }

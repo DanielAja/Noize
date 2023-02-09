@@ -6,10 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Noize #demo</title>
-    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
-    <link rel="manifest" href="/favicon/site.webmanifest">
+    <link rel="apple-touch-icon" sizes="180x180" href="/../favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/../favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/../favicon/favicon-16x16.png">
+    <link rel="manifest" href="/../favicon/site.webmanifest">
 </head>
 
 <body>
@@ -22,7 +22,7 @@
             <p class="nav-item">
                 Want to see what all the noize is about?
             </p>
-            <a class="nav-item" id="signup-button" onclick="location.href='signup'">sign-up</a>
+            <a class="nav-item" id="signup-button" onclick="location.href='/html/signup.html'">sign-up</a>
         </nav>
     </div>
 
@@ -61,7 +61,7 @@
     <div id="card-feed" class="card-feed"></div>
 </body>
 
-<link rel="stylesheet" href="/css/styles.css">
+<link rel="stylesheet" href="/../css/styles.css">
 
 <script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/7.13.1/firebase-auth.js"></script>
@@ -71,9 +71,13 @@
     require("firebase/firestore");
 </script>
 <script src="https://www.gstatic.com/firebasejs/7.22.1/firebase-storage.js"></script>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.17.1/firebase-analytics.js";
+</script>
 
-<script type="module" src="/javascript/javascript.js"></script>
-<script type="module" src="/javascript/config.js"></script>
-<script type="module" src="/javascript/recorder.js"></script>
+<script type="module" src="/../javascript/recorder.js"></script>
+<script type="module" src="/../javascript/javascript.js"></script>
+
 
 </html>

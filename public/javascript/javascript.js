@@ -30,41 +30,49 @@ var input;
 var AudioContext = window.AudioContext || window.webkitAudioContext;
 var audioContext;
 
-if (window.location.pathname.indexOf("@") !== -1) {
-  // pathname contains "@"
-  let userTag = window.location.pathname.split("@")[1];
-  console.log(userTag);
-  pageProfile = userTag;
-  if (userTag === "all") {
-    livePage = "recent";
-  } else {
+function page(path = "") {
+  if (path.includes("@")) {
+    let user = path.split("@")[1];
     livePage = "profile";
+    pageProfile = user;
+    updateFeed(true, 7);
+    updateNav("");
   }
-  home();
-} else {
-  switch (window.location.pathname) {
-    case '/signup':
+  switch (path) {
+    case '/html/signup.html':
       signup();
       break;
-    case '/demo':
+    case '/html/app.html':
+      home();
+      break;
+    case '/html/demo.html':
       home(true);
       break;
     case '/amped':
       document.getElementById("current-page-title").innerHTML = "amped";
       livePage = "profile";
       pageProfile = "#amped";
-      home();
+      updateFeed(true, 7);
+      updateNav("");
       break;
     case '/loud':
       document.getElementById("current-page-title").innerHTML = "#loud";
       livePage = "recent";
       pageProfile = "#loud";
-      home();
+      updateFeed(true, 7);
+      updateNav("");
+      break;
+    case '/html/app':
+      livePage = "recent";
+      pageProfile = "all";
+      updateFeed(true, 7);
+      updateNav("");
       break;
     default:
       signin();
   }
 }
+page(window.location.pathname);
 
 function signup() {
 
@@ -132,7 +140,7 @@ function signup() {
             docID: docRef.id,
             email: user.user.email
           };
-          window.location.href = "@all";
+          window.location.href = "/html/app.html";
         }).catch(function (error) {
         });
       }).catch(function (error) {
@@ -176,7 +184,7 @@ function signin() {
         // The user has been successfully signed in
         activeUser = getActiveUser(user);
         //updateActiveUser(activeUser);
-        window.location.href = "@all";
+        window.location.href = "/html/app.html";
       })
       .catch(function (error) {
         // An error occurred while signing in the user
@@ -294,15 +302,16 @@ function home(demo = false) {
         if (rec && rec.recording) {
           return;
         }
+        if (demo) {
+          alert("Demo account cannot post waves. Please sign up for a free account to share your Noize.");
+          return;
+        }
         const check = await spamCheck();
         if (!check) {
           alert("Whoa, Slow your roll! You're making a lot of Noize. Please wait one hour before posting again.");
           return;
         }
-        if (demo) {
-          alert("Demo account cannot post waves. Please sign up for a free account to share your Noize.");
-          return;
-        }
+
         let filter = chatFilter(wave.elements.message.value);
         if (filter[0] === false || rerecorded === false) {
           switch (filter[1]) {
@@ -424,7 +433,6 @@ function home(demo = false) {
               rec.record();
               console.log("Recording started");
 
-              stream = audioStream;
               document.getElementById("wave").classList.add("show");
               recordingTime = 0;
               updateCharCount();
@@ -592,7 +600,7 @@ function home(demo = false) {
           playButton.innerHTML = "Play";
           audio.currentTime = 0;
           let activecard = document.querySelector(".card.active");
-          console.log(activecard);
+
           if (activecard !== null) {
             activecard.querySelector(".textCell").click();
           } else {
@@ -615,7 +623,7 @@ function home(demo = false) {
           firebase.auth().signOut().then(function () {
             // The user has been successfully signed out
             activeUser = null;
-            window.location.href = '/';
+            window.location.href = "/html/index.html";
           }).catch(function (error) {
             // An error occurred while signing out the user
             console.error(error);
@@ -623,22 +631,22 @@ function home(demo = false) {
         });
         document.getElementById("now-nav-item").addEventListener('click', () => {
           if (pageProfile !== "all") {
-            window.location.href = '/@all';
+            page("/html/app");
           }
         });
         document.getElementById("amped-nav-item").addEventListener('click', () => {
           if (pageProfile !== "#amped") {
-            window.location.href = '/amped';
+            page("/amped");
           }
         });
         document.getElementById("loud-nav-item").addEventListener('click', () => {
           if (pageProfile !== "#loud") {
-            window.location.href = '/loud';
+            page("/loud");
           }
         });
         document.getElementById("username-nav-item").addEventListener('click', () => {
           if (pageProfile !== activeUser.username) {
-            window.location.href = '/@' + activeUser.username;
+            page('@' + activeUser.username);
           }
         });
       }
@@ -649,7 +657,7 @@ function home(demo = false) {
 
       document.getElementById("title").addEventListener('click', () => {
         if (pageProfile !== "all" && pageSwap) {
-          window.location.href = '/@all';
+          page("/html/app");
         }
         pageSwap = true;
       });
@@ -658,7 +666,7 @@ function home(demo = false) {
 
     } else {
       // User is not signed in
-      window.location.href = '/';
+      page("/html/index.html");
     }
   });
 
@@ -726,8 +734,8 @@ async function updateFeed(refresh = true, numberToFetch = 7) {
       break;
     case "profile":
       if (numberToFetch > 10) {
-        console.log("number to fetch is greater than 10 not supported");
-        console.log("setting number to fetch to 10");
+        console.log("Number to fetch is greater than 10 not supported");
+        console.log("Setting number to fetch to 10");
         numberToFetch = 10;
       }
       if (refresh) {
@@ -764,42 +772,39 @@ async function updateFeed(refresh = true, numberToFetch = 7) {
                 }
               });
             }
-            console.log("wavesToLoad:", wavesToLoad);
-        const promises = [];
-        for (let i = 0; i < wavesToLoad.length; i++) {
-          let waveId = wavesToLoad[i];
-          promises.push(
-            messagesRef.doc(waveId).get().then(doc => {
-              if (!doc.exists) {
-                // Remove the wave ID from the wavesToLoad array if the document does not exist
-                wavesToLoad.splice(i, 1);
-                i--;
-              }
-            })
-          );
-        }
-        // Wait for all the promises to resolve before moving on
-        await Promise.all(promises).then(() => {
-          console.log("wavesToLoad:", wavesToLoad);
+            const promises = [];
+            for (let i = 0; i < wavesToLoad.length; i++) {
+              let waveId = wavesToLoad[i];
+              promises.push(
+                messagesRef.doc(waveId).get().then(doc => {
+                  if (!doc.exists) {
+                    // Remove the wave ID from the wavesToLoad array if the document does not exist
+                    wavesToLoad.splice(i, 1);
+                    i--;
+                  }
+                })
+              );
+            }
+            // Wait for all the promises to resolve before moving on
+            await Promise.all(promises).then(() => {
 
-          switch (profile) {
-            case "#amped":
-              activeUser.amped = wavesToLoad;
-              break;
-            default:
-              activeUser.created = wavesToLoad;
-          }
-          console.log("activeUser:", activeUser);
-          updateActiveUser(activeUser);
-        });
+              switch (profile) {
+                case "#amped":
+                  activeUser.amped = wavesToLoad;
+                  break;
+                default:
+                  activeUser.created = wavesToLoad;
+              }
+              console.log("activeUser:", activeUser);
+              updateActiveUser(activeUser);
+            });
 
           })
           .catch(function (error) {
             console.log("Error getting documents: ", error);
             return false;
           });
-        
-        console.log(wavesToLoad.slice(numberToFetch * -1));
+
         messagesRef = messagesRef.where(firebase.firestore.FieldPath.documentId(), "in", wavesToLoad.slice(numberToFetch * -1));
 
         lastVisibleIndex = wavesToLoad.length - numberToFetch;
@@ -930,7 +935,6 @@ async function updateFeed(refresh = true, numberToFetch = 7) {
             if (!audio.pause()) {
               audio.pause();
             }
-            console.log(data.audio);
             nowPlaying = data.audio;
             activeButton = playButton;
             audio.src = url;
@@ -1071,7 +1075,6 @@ async function updateFeed(refresh = true, numberToFetch = 7) {
 
         // Get a reference to the file
         var fileRef = firebase.storage().ref(data.audio);
-        console.log(wavesLoaded.indexOf(data));
         document.getElementById("feed").deleteRow(wavesLoaded.length - wavesLoaded.indexOf(data));
 
         wavesLoaded.splice(wavesLoaded.indexOf(data), 1);
@@ -1112,13 +1115,12 @@ function saveAudioToGCS(audioBlob, fileName) {
     function (snapshot) {
       // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
       var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-      //console.log('Upload is ' + progress + '% done');
       switch (snapshot.state) {
         case firebase.storage.TaskState.PAUSED: // or 'paused'
-          //console.log('Upload is paused');
+          // console.log('Upload is paused');
           break;
         case firebase.storage.TaskState.RUNNING: // or 'running'
-          // console.log('Upload is running');
+          //console.log('Upload is running');
           break;
       }
     },
@@ -1225,7 +1227,6 @@ function getActiveUser(user, uid = '') {
         };
         return firebase.firestore().collection('users').add(activeUser)
       } else {
-        //console.log("found matching documents");
         return querySnapshot.forEach(function (doc) {
           activeUser = doc.data();
           activeUser.docID = doc.id;
@@ -1261,7 +1262,7 @@ function updateActiveUser(activeUser) {
   }
   firebase.firestore().collection('users').doc(activeUser.docID).update(activeUser
   ).then(() => {
-    console.log("Document successfully updated!");
+    //console.log("Document successfully updated!");
   }).catch((error) => {
     console.error("Error updating document: ", error);
   });
@@ -1390,7 +1391,7 @@ function tableRowToCard(tr, data, cardNumber) {
     const cardUsername = card.getElementsByTagName("h1")[0];
     if (cardUsername.innerText !== document.getElementById("current-page-title").innerText) {
       cardUsername.addEventListener("click", function (event) {
-        window.location.href = '/@' + tr.cells[1].innerText;
+        page('@' + tr.cells[1].innerText);
       });
     }
   }
@@ -1518,32 +1519,6 @@ function updateNav(show = "") {
   }
 }
 
-function page(page = "now", toggle = true) {
-  switch (page) {
-    case "now":
-      document.getElementById("current-page-title").innerHTML = "@all";
-      livePage = "recent";
-      pageProfile = "all";
-      break;
-    case "selfProfile":
-      document.getElementById("current-page-title").innerText = document.getElementById("username-nav-item").innerText;
-      livePage = "profile";
-      pageProfile = document.getElementById("username-nav-item").innerText.slice(1);
-      break;
-    case "amped":
-
-      break;
-    case "loud":
-      break;
-    default:
-    // code block
-  }
-  updateFeed(true, 7);
-  if (toggle) {
-    document.getElementById("current-page-title").click();
-  }
-}
-
 function buttonShow(button = true) {
   let spacers = document.getElementsByClassName("spacer");
   if (button) {
@@ -1595,7 +1570,6 @@ async function spamCheck() {
     });
   //check if user has created waves in the last 7 minutes
   for (let i = wavesToCheck.length - 1; i >= 0; i--) {
-    console.log("strikes " + strikes);
     const docRef = firebase.firestore().collection(col).doc(wavesToCheck[i]);
     await docRef.get().then(function (doc) {
       if (doc.exists) {
@@ -1610,24 +1584,7 @@ async function spamCheck() {
 
         let diff = now - created;
         lastCreated = created;
-        console.log("now " + now);
-        console.log(
-          now.toLocaleString('en-US', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit'
-          }),
-          created.toLocaleString('en-US', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit'
-          }), diff);
         if (diff < 600000) {
-          console.log("strikes added");
           strikes++;
         }
       } else {
@@ -1637,7 +1594,6 @@ async function spamCheck() {
     });
 
   }
-  console.log("Total strikes " + strikes);
   if (strikes < 3) {
     return true;
   }
